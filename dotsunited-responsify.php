@@ -27,6 +27,10 @@ function iframes($html)
     }, $html);
 
     $html = \preg_replace_callback('/<iframe(.+)><\/iframe>/isU', function ($matches) {
+        if (false !== \strpos($matches[1], 'data-responsify="false"')) {
+            return '<iframe' . $matches[1] . '></iframe>';
+        }
+
         $width = null;
         $height = null;
         $style = '';
@@ -82,6 +86,10 @@ function iframes($html)
 function tables($html)
 {
     $html = \preg_replace_callback('/<table(.*)>(.+)<\/table>/isU', function ($matches) {
+        if (false !== \strpos($matches[1], 'data-responsify="false"')) {
+            return '<iframe' . $matches[1] . '></iframe>';
+        }
+
         $width = null;
         $style = '';
 
