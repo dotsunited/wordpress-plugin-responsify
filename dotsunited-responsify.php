@@ -34,50 +34,67 @@ function iframes($html)
         $width = null;
         $height = null;
         $style = '';
-
-        if (\preg_match('/width="([^"]+)"/iU', $matches[1], $wMatch)) {
-            $width = $wMatch[1];
-        }
-
-        if (\preg_match('/height="([^"]+)"/iU', $matches[1], $hMatch)) {
-            $height = $hMatch[1];
-        }
-
-        if (\preg_match('/style="([^"]+)"/iU', $matches[1], $hMatch)) {
-            $style = \trim($hMatch[1], ';') . ';';
-        }
-
-        $paddingBottom = '56.25';
-
-        if ($width && $height) {
-            $calcWidth = $width;
-            $calcHeight = $height;
-
-            // Normalize if both are percentage values
-            if ('%' === \substr($calcWidth, -1) && '%' === \substr($calcHeight, -1)) {
-                $calcWidth = \substr($calcWidth, 0, -1);
-                $calcHeight = \substr($calcHeight, 0, -1);
-            }
-
-            if (\is_numeric($calcWidth) && \is_numeric($calcHeight)) {
-                $paddingBottom = \sprintf('%.2F', ($calcHeight / $calcWidth) * 100);
-            }
-        }
-
-        $iFrameAttr = \preg_replace('/style="([^"]+)"/iU', '', $matches[1]);
-        $iFrameAttr .= '  style="' . $style . 'position:absolute;top:0;left:0;width:100%;height:100%;"';
-
-        $styleAttr = '';
-
-        if ($width) {
-            if (\is_numeric($width)) {
-                $styleAttr = ' style="max-width:' . $width . 'px"';
-            } elseif ('%' === \substr($width, -1)) {
-                $styleAttr = ' style="max-width:' . $width . '"';
-            }
-        }
-
-        return '<div class="responsify-iframe"' . $styleAttr . '><div style="position:relative;padding-bottom:' . $paddingBottom . '%;height:0;overflow:hidden;width:100%;"><iframe' . $iFrameAttr . '></iframe></div></div>';
+	    $url = '';
+	    $key = 'spotify';
+		   
+	    if (\preg_match('/src="([^"]+)"/iU', $matches[1], $uMatch)) {
+		    $url = \trim($uMatch[1], ';') . ';';
+	    }
+	    
+	    if (!strpos($url, $key)) {
+		
+		    if (\preg_match('/width="([^"]+)"/iU', $matches[1], $wMatch)) {
+			    $width = $wMatch[1];
+		    }
+		
+		    if (\preg_match('/height="([^"]+)"/iU', $matches[1], $hMatch)) {
+			    $height = $hMatch[1];
+		    }
+		
+		    if (\preg_match('/style="([^"]+)"/iU', $matches[1], $hMatch)) {
+			    $style = \trim($hMatch[1], ';') . ';';
+		    }
+		
+		    $paddingBottom = '56.25';
+		
+		    if ($width && $height) {
+			    $calcWidth = $width;
+			    $calcHeight = $height;
+			
+			    // Normalize if both are percentage values
+			    if ('%' === \substr($calcWidth, -1) && '%' === \substr($calcHeight, -1)) {
+				    $calcWidth = \substr($calcWidth, 0, -1);
+				    $calcHeight = \substr($calcHeight, 0, -1);
+			    }
+			
+			    if (\is_numeric($calcWidth) && \is_numeric($calcHeight)) {
+				    $paddingBottom = \sprintf('%.2F', ($calcHeight / $calcWidth) * 100);
+			    }
+		    }
+		
+		    $iFrameAttr = \preg_replace('/style="([^"]+)"/iU', '', $matches[1]);
+		    $iFrameAttr .= '  style="' . $style . 'position:absolute;top:0;left:0;width:100%;height:100%;"';
+		
+		    $styleAttr = '';
+		
+		    if ($width) {
+			    if (\is_numeric($width)) {
+				    $styleAttr = ' style="max-width:' . $width . 'px"';
+			    } elseif ('%' === \substr($width, -1)) {
+				    $styleAttr = ' style="max-width:' . $width . '"';
+			    }
+		    }
+		
+		    return '<div class="responsify-iframe"><div style="position:relative;padding-bottom:' . $paddingBottom . '%;height:0;overflow:hidden;width:100%;"><iframe' . $iFrameAttr . '></iframe></div></div>';
+	    	
+	    } else {
+		
+		    $iFrameAttr = \preg_replace('/style="([^"]+)"/iU', '', $matches[1]);
+		    $iFrameAttr .= '';
+	    	
+	    	return '<iframe' . $iFrameAttr . '></iframe>';
+	    }
+	    
     }, $html);
 
     return $html;
