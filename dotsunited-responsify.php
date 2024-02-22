@@ -104,7 +104,7 @@ function tables($html)
 {
     $html = \preg_replace_callback('/<table(.*)>(.+)<\/table>/isU', function ($matches) {
         if (false !== \strpos($matches[1], 'data-responsify="false"')) {
-            return '<iframe' . $matches[1] . '></iframe>';
+            return '<table' . $matches[1] . '>' . $matches[2] . '</table>';
         }
 
         $width = null;
